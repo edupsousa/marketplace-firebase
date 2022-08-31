@@ -1,7 +1,7 @@
-import NovoAnuncioPage from "./pages/NovoAnuncioPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
-  return <NovoAnuncioPage />;
+  return <LoginPage />;
 }
 
 export default App;

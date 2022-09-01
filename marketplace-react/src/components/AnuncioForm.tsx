@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import EnviarFotos from "./EnviarFotos";
+import { salvarNovoAnuncio } from "../firebase/firestore";
+import { useAuthContext } from "../firebase/auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const categorias: string[] = [
   "Eletrônicos",
@@ -37,6 +40,11 @@ const schema = yup.object({
 });
 
 export default function AnuncioForm() {
+  const navigate = useNavigate();
+  const { user } = useAuthContext();
+
+  if (!user) return <Navigate to="/login" />;
+
   const {
     register,
     handleSubmit,
@@ -44,8 +52,14 @@ export default function AnuncioForm() {
   } = useForm<FormInputs>({
     resolver: yupResolver(schema),
   });
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+  const onSubmit = async (data: FormInputs) => {
+    const anuncio = { ...data, anunciante: user.uid, fotos: [] };
+    try {
+      await salvarNovoAnuncio(anuncio);
+      navigate("/meus-anuncios/lista");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

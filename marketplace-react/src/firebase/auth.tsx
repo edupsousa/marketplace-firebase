@@ -54,6 +54,8 @@ function AuthContextProvider({ children }: PropsWithChildren<{}>) {
     signOut(auth);
   }, []);
 
+  if (isLoading) return <p>Carregando...</p>;
+
   return (
     <AuthContext.Provider value={{ user, isLoading, login, logout }}>
       {children}

@@ -11,6 +11,7 @@ import formatarDataAnuncio from "../utils/formatarDataAnuncio";
 import formatarPreco from "../utils/formatarPreco";
 import { BsFillTrashFill } from "react-icons/bs";
 import { apagarFotosAnuncio } from "../firebase/storage";
+import Anuncio from "../components/Anuncio";
 
 export default function MeusAnunciosPage() {
   const [anuncios, setAnuncios] = useState<AnuncioWithId[]>();
@@ -42,44 +43,18 @@ export default function MeusAnunciosPage() {
       <Row>
         {anuncios?.map((anuncio) => (
           <Col xs={12} lg={6} key={anuncio.id}>
-            <Card className="text-center">
-              <Card.Header>{anuncio.categoria}</Card.Header>
-              <Card.Body className="d-flex">
-                <div
-                  className="w-50 border rounded"
-                  style={{ aspectRatio: "4/3" }}
+            <Anuncio
+              anuncio={anuncio}
+              botao={
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={() => removerAnuncio(anuncio.id)}
                 >
-                  <Carousel className="fotos-anuncio w-100 h-100">
-                    {anuncio.fotos.map((foto, index) => (
-                      <Carousel.Item key={index}>
-                        <Image
-                          src={foto}
-                          className="w-100 h-100"
-                          style={{ objectFit: "cover" }}
-                        />
-                      </Carousel.Item>
-                    ))}
-                  </Carousel>
-                </div>
-                <div className="flex-grow-1 d-flex flex-column justify-content-center">
-                  <Card.Title>{anuncio.titulo}</Card.Title>
-                  <Card.Text>{anuncio.descricao}</Card.Text>
-                  <div>
-                    <Button
-                      variant="outline-danger"
-                      size="sm"
-                      onClick={() => removerAnuncio(anuncio.id)}
-                    >
-                      <BsFillTrashFill /> Remover
-                    </Button>
-                  </div>
-                </div>
-              </Card.Body>
-              <Card.Footer className="text-muted">
-                <div>Valor: {formatarPreco(anuncio.preco)}</div>
-                <div>Anunciado: {formatarDataAnuncio(anuncio.dataAnuncio)}</div>
-              </Card.Footer>
-            </Card>
+                  <BsFillTrashFill /> Remover
+                </Button>
+              }
+            />
           </Col>
         ))}
       </Row>

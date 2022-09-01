@@ -4,9 +4,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import EnviarFotos from "./EnviarFotos";
-import { salvarNovoAnuncio } from "../firebase/firestore";
+import {
+  adicionarFotosAnuncio,
+  salvarNovoAnuncio,
+} from "../firebase/firestore";
 import { useAuthContext } from "../firebase/auth";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { salvarFotoAnuncio } from "../firebase/storage";
 
 const categorias: string[] = [
   "Eletrônicos",
@@ -40,6 +45,7 @@ const schema = yup.object({
 });
 
 export default function AnuncioForm() {
+  const [fotos, setFotos] = useState<File[]>([]);
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
@@ -53,9 +59,13 @@ export default function AnuncioForm() {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data: FormInputs) => {
-    const anuncio = { ...data, anunciante: user.uid, fotos: [] };
+    const anuncio = { ...data, anunciante: user.uid };
     try {
-      await salvarNovoAnuncio(anuncio);
+      const id = await salvarNovoAnuncio(anuncio);
+      const urlFotos = await Promise.all(
+        fotos.map((foto) => salvarFotoAnuncio(foto, user.uid, id))
+      );
+      await adicionarFotosAnuncio(id, urlFotos);
       navigate("/meus-anuncios/lista");
     } catch (e) {
       console.error(e);
@@ -110,7 +120,7 @@ export default function AnuncioForm() {
 
       <Form.Group controlId="fotos">
         <Form.Label>Fotos</Form.Label>
-        <EnviarFotos />
+        <EnviarFotos onFotosChange={setFotos} />
       </Form.Group>
 
       <Button variant="success" type="submit">

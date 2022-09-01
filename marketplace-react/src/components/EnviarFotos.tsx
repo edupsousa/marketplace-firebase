@@ -49,17 +49,21 @@ function Foto({ index, image, onRemove, onUpload }: FotoProps) {
   );
 }
 
-export default function EnviarFotos() {
+type EnviarFotosProps = {
+  onFotosChange: (fotos: File[]) => void;
+};
+
+export default function EnviarFotos({ onFotosChange }: EnviarFotosProps) {
   const [images, setImages] = useState([]);
   const maxNumber = 4;
 
-  const onChange = (
-    imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
-  ) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
+  const onChange = (imageList: ImageListType) => {
     setImages(imageList as never[]);
+    onFotosChange(
+      imageList
+        .map((image) => image.file)
+        .filter((file): file is File => file !== undefined)
+    );
   };
 
   return (

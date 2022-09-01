@@ -8,3 +8,7 @@ body,
   display: grid;
   grid-template-rows: auto 1fr;
 }
+.fotos-anuncio .carousel-inner,
+.fotos-anuncio .carousel-item {
+  height: 100%;
+}

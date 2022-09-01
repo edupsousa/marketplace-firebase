@@ -8,6 +8,7 @@ import {
   getDocs,
   doc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore/lite";
 import app from "./app";
 
@@ -26,13 +27,23 @@ export type Anuncio = {
   fotos: string[];
 };
 
-export type NovoAnuncio = Omit<Anuncio, "dataAnuncio">;
+export type NovoAnuncio = Omit<Anuncio, "dataAnuncio" | "fotos">;
 export type AnuncioWithId = Anuncio & { id: string };
 
-export function salvarNovoAnuncio(anuncio: NovoAnuncio) {
+export async function salvarNovoAnuncio(anuncio: NovoAnuncio) {
   const dataAnuncio = Date.now();
   const anunciosCollection = collection(firestore, "anuncios");
-  return addDoc(anunciosCollection, { dataAnuncio, ...anuncio });
+  const anuncioRef = await addDoc(anunciosCollection, {
+    dataAnuncio,
+    ...anuncio,
+  });
+  return anuncioRef.id;
+}
+
+export async function adicionarFotosAnuncio(id: string, fotos: string[]) {
+  if (fotos.length === 0) return;
+  const anuncioRef = doc(firestore, "anuncios", id);
+  await updateDoc(anuncioRef, { fotos });
 }
 
 export async function listarMeusAnuncios(

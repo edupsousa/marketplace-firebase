@@ -4,6 +4,9 @@ service cloud.firestore {
     match /anuncios/{anuncio} {
       allow create: if request.auth.uid != null 
                     && request.auth.uid == request.resource.data.anunciante;
+      allow update: if request.auth.uid != null 
+                    && request.auth.uid == resource.data.anunciante
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fotos']);
       allow delete: if request.auth.uid != null 
                     && request.auth.uid == resource.data.anunciante;
       allow read: if true;

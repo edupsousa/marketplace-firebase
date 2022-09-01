@@ -1,8 +1,18 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    match /images/{user}/{anuncio}/{image} {
+      allow read: if request.auth.uid != null
+                  && request.auth.uid == user;
+      allow read: if request.resource.contentType.matches('image/.*');
+      allow create: if request.auth.uid != null
+                    && request.auth.uid == user
+                    && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth.uid != null
+                    && request.auth.uid == user;
+    }
     match /{allPaths=**} {
-      allow read, write: if request.auth!=null;
+      allow read, write: if false;
     }
   }
 }

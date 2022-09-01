@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Carousel, Col, Image, Row } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../firebase/auth";
 import {
@@ -10,6 +10,7 @@ import {
 import formatarDataAnuncio from "../utils/formatarDataAnuncio";
 import formatarPreco from "../utils/formatarPreco";
 import { BsFillTrashFill } from "react-icons/bs";
+import { apagarFotosAnuncio } from "../firebase/storage";
 
 export default function MeusAnunciosPage() {
   const [anuncios, setAnuncios] = useState<AnuncioWithId[]>();
@@ -30,6 +31,7 @@ export default function MeusAnunciosPage() {
   const removerAnuncio = async (id: string) => {
     if (await apagarAnuncio(id)) {
       setAnuncios((lista) => lista?.filter((anuncio) => anuncio.id !== id));
+      await apagarFotosAnuncio(user.uid, id);
     }
   };
 
@@ -46,7 +48,19 @@ export default function MeusAnunciosPage() {
                 <div
                   className="w-50 border rounded"
                   style={{ aspectRatio: "4/3" }}
-                ></div>
+                >
+                  <Carousel className="fotos-anuncio w-100 h-100">
+                    {anuncio.fotos.map((foto, index) => (
+                      <Carousel.Item key={index}>
+                        <Image
+                          src={foto}
+                          className="w-100 h-100"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </Carousel.Item>
+                    ))}
+                  </Carousel>
+                </div>
                 <div className="flex-grow-1 d-flex flex-column justify-content-center">
                   <Card.Title>{anuncio.titulo}</Card.Title>
                   <Card.Text>{anuncio.descricao}</Card.Text>

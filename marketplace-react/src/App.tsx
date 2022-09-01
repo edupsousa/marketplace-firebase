@@ -1,7 +1,16 @@
-import LoginPage from "./pages/LoginPage";
+import { Container } from "react-bootstrap";
+import { Outlet } from "react-router-dom";
+import AppNavBar from "./components/AppNavBar";
 
 function App() {
-  return <LoginPage />;
+  return (
+    <>
+      <AppNavBar />
+      <Container>
+        <Outlet />
+      </Container>
+    </>
+  );
 }
 
 export default App;

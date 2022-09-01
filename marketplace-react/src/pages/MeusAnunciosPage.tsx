@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button, Card, Carousel, Col, Image, Row } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuthContext } from "../firebase/auth";
 import {
   AnuncioWithId,
@@ -38,7 +38,16 @@ export default function MeusAnunciosPage() {
 
   return (
     <div>
-      <h1>Meus Anúncios</h1>
+      <Row>
+        <Col>
+          <h1>Meus Anúncios</h1>
+        </Col>
+        <Col xs="auto" className="d-flex align-items-center">
+          <Link to="/meus-anuncios/novo" className="btn btn-success btn-sm">
+            Novo Anúncio
+          </Link>
+        </Col>
+      </Row>
       {isLoading && <p>Carregando...</p>}
       <Row>
         {anuncios?.map((anuncio) => (

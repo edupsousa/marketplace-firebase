@@ -9,6 +9,7 @@ import {
   doc,
   deleteDoc,
   updateDoc,
+  orderBy,
 } from "firebase/firestore/lite";
 import app from "./app";
 
@@ -67,4 +68,13 @@ export async function apagarAnuncio(id: string) {
     console.error(e);
     return false;
   }
+}
+
+export async function listarTodosAnuncios(): Promise<AnuncioWithId[]> {
+  const anunciosCollection = collection(firestore, "anuncios");
+  const q = query(anunciosCollection, orderBy("dataAnuncio", "desc"));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs
+    .map((doc) => ({ ...(doc.data() as Anuncio), id: doc.id }))
+    .sort((a, b) => b.dataAnuncio - a.dataAnuncio);
 }

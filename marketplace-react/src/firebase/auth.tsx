@@ -20,7 +20,7 @@ import app from "./app";
 const auth = getAuth(app);
 auth.useDeviceLanguage();
 if (import.meta.env.DEV) {
-  connectAuthEmulator(auth, "http://localhost:9099");
+  connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
 }
 const authProvider = new GoogleAuthProvider();
 

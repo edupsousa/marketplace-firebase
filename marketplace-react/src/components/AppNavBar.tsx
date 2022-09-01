@@ -20,14 +20,14 @@ export default function AppNavBar() {
               Ver Anúncios
             </Nav.Link>
             {isLoggedIn && (
-              <NavDropdown title="Meus Anúncios" id="basic-nav-dropdown">
-                <NavDropdown.Item as={NavLink} to="meus-anuncios/lista">
-                  Anúncios Publicados
-                </NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="meus-anuncios/novo">
-                  Publicar Anúncio
-                </NavDropdown.Item>
-              </NavDropdown>
+              <>
+                <Nav.Link as={NavLink} to="meus-anuncios/lista">
+                  Meus Anúncios
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="mensagens/ver">
+                  Caixa de Mensagens
+                </Nav.Link>
+              </>
             )}
           </Nav>
           <Nav>

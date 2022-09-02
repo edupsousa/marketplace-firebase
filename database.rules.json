@@ -19,6 +19,7 @@
     "anuncios": {
       "$anuncio": {
         ".read": "auth != null && data.child('anunciante').val() == auth.uid",
+        ".write": "auth != null && data.child('anunciante').val() == auth.uid",
         "anunciante": {
           ".write": "auth != null && newData.val() == auth.uid"
         },

@@ -21,6 +21,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { apagarFotosAnuncio } from "../firebase/storage";
 import Anuncio from "../components/Anuncio";
 import { BiMessageRoundedCheck } from "react-icons/bi";
+import { apagarAnunciante } from "../firebase/database";
 
 export default function MeusAnunciosPage() {
   const [anuncios, setAnuncios] = useState<AnuncioWithId[]>();
@@ -42,6 +43,7 @@ export default function MeusAnunciosPage() {
     if (await apagarAnuncio(id)) {
       setAnuncios((lista) => lista?.filter((anuncio) => anuncio.id !== id));
       await apagarFotosAnuncio(user.uid, id);
+      await apagarAnunciante(id);
     }
   };
 

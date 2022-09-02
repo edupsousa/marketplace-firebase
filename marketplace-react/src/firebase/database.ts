@@ -32,6 +32,11 @@ export async function salvarAnunciante(idAnuncio: string, anunciante: string) {
   await set(anunciosRef, anunciante);
 }
 
+export async function apagarAnunciante(idAnuncio: string) {
+  const anunciosRef = ref(db, `anuncios/${idAnuncio}`);
+  await remove(anunciosRef);
+}
+
 export async function salvarMensagemInteressado(
   idInteressado: string,
   nomeInteressado: string,

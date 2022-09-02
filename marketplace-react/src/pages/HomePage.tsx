@@ -30,12 +30,15 @@ export default function HomePage() {
             <Anuncio
               anuncio={anuncio}
               botao={
-                user && user.uid !== anuncio.anunciante ? (
+                user ? (
                   <Link
                     className="btn btn-outline-success"
                     to={`/mensagens/${anuncio.id}`}
                   >
-                    <BiMessageRoundedCheck /> Enviar Proposta
+                    <BiMessageRoundedCheck />{" "}
+                    {user.uid === anuncio.anunciante
+                      ? "Ver Propostas"
+                      : "Enviar Proposta"}
                   </Link>
                 ) : undefined
               }

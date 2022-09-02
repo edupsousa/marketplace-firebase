@@ -1,12 +1,12 @@
 import {
-  getAuth,
-  connectAuthEmulator,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  User,
-  onAuthStateChanged,
-  signOut,
   browserSessionPersistence,
+  connectAuthEmulator,
+  getAuth,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithRedirect,
+  signOut,
+  User,
 } from "firebase/auth";
 import {
   createContext,
@@ -68,6 +68,7 @@ function AuthContextProvider({ children }: PropsWithChildren<{}>) {
   }, [user]);
 
   const login = useCallback(() => {
+    window.history.pushState({}, "", "/");
     signInWithRedirect(auth, authProvider);
   }, []);
 
@@ -76,7 +77,7 @@ function AuthContextProvider({ children }: PropsWithChildren<{}>) {
     signOut(auth);
   }, []);
 
-  if (isLoading) return <p>Carregando...</p>;
+  // if (isLoading) return <p>Carregando...</p>;
 
   return (
     <AuthContext.Provider value={{ user, isLoading, login, logout }}>

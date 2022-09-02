@@ -8,9 +8,9 @@ type Props = {
 export default function Anunciante({ nome, descricao }: Props) {
   return (
     <ListGroup>
-      <ListGroup.Item action>
-        <div>Falando com o Vendedor: {nome}</div>
-        <small className="text-muted">Sobre: {descricao}</small>
+      <ListGroup.Item variant="primary">
+        <div className="fw-bold">Falando com o Vendedor: {nome}</div>
+        <small>Sobre: {descricao}</small>
       </ListGroup.Item>
     </ListGroup>
   );

@@ -109,6 +109,7 @@ export function listarInteressados(
 ) {
   const interessadosRef = ref(db, `anuncios/${idAnuncio}/interessados`);
   return onValue(interessadosRef, (snapshot) => {
+    if (!snapshot.exists()) return atualizar([]);
     const interessados = snapshot.val() as Record<string, Interessado>;
     const lista = Object.entries(interessados)
       .map(([id, interessado]) => ({

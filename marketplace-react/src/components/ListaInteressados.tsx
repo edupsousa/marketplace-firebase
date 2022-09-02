@@ -12,11 +12,15 @@ export default function ListaInteressados({
   idAnuncio,
   onInteressadoSelecionado,
 }: Props) {
+  const [carregando, setCarregando] = useState(true);
   const [selecionado, setSelecionado] = useState<undefined | string>();
   const [interessados, setInteressados] = useState<InteressadoWithId[]>([]);
 
   useEffect(() => {
-    return listarInteressados(idAnuncio, setInteressados);
+    return listarInteressados(idAnuncio, (lista) => {
+      setInteressados(lista);
+      setCarregando(false);
+    });
   }, []);
 
   const selecionar = (id: string, nome: string) => {
@@ -26,6 +30,10 @@ export default function ListaInteressados({
 
   return (
     <ListGroup>
+      {carregando && <ListGroup.Item>Carregando...</ListGroup.Item>}
+      {!carregando && interessados.length === 0 && (
+        <ListGroup.Item variant="danger">Nenhum interessado 😕</ListGroup.Item>
+      )}
       {interessados.map(({ id, nome, ultimaMensagem }) => (
         <ListGroup.Item
           key={id}

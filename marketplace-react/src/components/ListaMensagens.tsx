@@ -50,7 +50,7 @@ export default function ListaMensagens({
       if (getRemetenteSouEu(fromInteressado)) {
         return "Você";
       }
-      if (isAnunciante) return nomeUsuario;
+      if (isAnunciante) return nomeUsuario!;
       return nomeAnunciante;
     },
     [getRemetenteSouEu, isAnunciante, nomeAnunciante, nomeUsuario]

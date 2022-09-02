@@ -29,7 +29,7 @@ const categorias: string[] = [
   "Jogos",
   "Música",
   "Celulares e Smartphones",
-];
+].sort();
 
 type FormInputs = {
   titulo: string;

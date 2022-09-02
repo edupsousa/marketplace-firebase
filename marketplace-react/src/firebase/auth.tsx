@@ -6,6 +6,7 @@ import {
   User,
   onAuthStateChanged,
   signOut,
+  browserSessionPersistence,
 } from "firebase/auth";
 import {
   createContext,
@@ -22,6 +23,7 @@ import { setOnline } from "./database";
 
 const auth = getAuth(app);
 auth.useDeviceLanguage();
+auth.setPersistence(browserSessionPersistence);
 if (import.meta.env.DEV) {
   connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
 }

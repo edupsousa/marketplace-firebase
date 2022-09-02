@@ -1,11 +1,16 @@
 import { ListGroup } from "react-bootstrap";
 
-export default function Anunciante() {
+type Props = {
+  nome: string;
+  descricao: string;
+};
+
+export default function Anunciante({ nome, descricao }: Props) {
   return (
     <ListGroup>
       <ListGroup.Item action>
-        <div>Vendedor: Eduardo</div>
-        <small className="text-muted">Carro - R$ 2000,00</small>
+        <div>Falando com o Vendedor: {nome}</div>
+        <small className="text-muted">Sobre: {descricao}</small>
       </ListGroup.Item>
     </ListGroup>
   );

@@ -13,9 +13,11 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import app from "./app";
+import { setOnline } from "./database";
 
 const auth = getAuth(app);
 auth.useDeviceLanguage();
@@ -28,7 +30,7 @@ type AuthContextType = {
   user: User | null;
   isLoading: boolean;
   login: () => void;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -38,6 +40,7 @@ const useAuthContext = () => useContext(AuthContext)!;
 function AuthContextProvider({ children }: PropsWithChildren<{}>) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setLoading] = useState(true);
+  const setOffline = useRef<null | (() => Promise<void>)>(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
@@ -46,11 +49,19 @@ function AuthContextProvider({ children }: PropsWithChildren<{}>) {
     });
   }, []);
 
+  useEffect(() => {
+    if (user === null) return;
+    setOnline(user.uid).then((onlineHandler) => {
+      setOffline.current = onlineHandler;
+    });
+  }, [user]);
+
   const login = useCallback(() => {
     signInWithRedirect(auth, authProvider);
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    if (setOffline.current) await setOffline.current();
     signOut(auth);
   }, []);
 

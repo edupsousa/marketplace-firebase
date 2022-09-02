@@ -1,11 +1,14 @@
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../firebase/auth";
 
 export default function LogoutPage() {
+  const navigate = useNavigate();
   const { logout } = useAuthContext();
   useEffect(() => {
-    logout();
+    logout().then(() => {
+      navigate("/", { replace: true });
+    });
   }, [logout]);
-  return <Navigate to="/" replace={true} />;
+  return <></>;
 }

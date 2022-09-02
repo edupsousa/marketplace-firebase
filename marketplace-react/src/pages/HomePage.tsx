@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { BiMessageRoundedCheck } from "react-icons/bi";
+import { Link } from "react-router-dom";
 import Anuncio from "../components/Anuncio";
 import { useAuthContext } from "../firebase/auth";
 import { AnuncioWithId, listarTodosAnuncios } from "../firebase/firestore";
@@ -30,9 +31,12 @@ export default function HomePage() {
               anuncio={anuncio}
               botao={
                 user && user.uid !== anuncio.anunciante ? (
-                  <Button variant="outline-success">
+                  <Link
+                    className="btn btn-outline-success"
+                    to={`/mensagens/${anuncio.id}`}
+                  >
                     <BiMessageRoundedCheck /> Enviar Proposta
-                  </Button>
+                  </Link>
                 ) : undefined
               }
             />

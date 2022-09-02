@@ -7,6 +7,34 @@
         ".write": "auth != null && auth.uid == $uid",
         ".read": "auth != null"
       }
+    },
+    "mensagens": {
+      "$anuncio": {
+        "$remetente": {
+          ".write": "auth != null && auth.uid == $remetente",
+          ".read": "auth != null && auth.uid == $remetente"
+        }
+      }
+    },
+    "anuncios": {
+      "$anuncio": {
+        ".read": "auth != null && data.child('anunciante').val() == auth.uid",
+        "anunciante": {
+          ".write": "auth != null && newData.val() == auth.uid"
+        },
+        "interessados": {
+          "$interessado": {
+            ".write": "auth != null && auth.uid == $interessado",
+            ".read": "auth != null && auth.uid == $interessado"
+          }
+        },
+        "mensagens": {
+          "$remetente": {
+            ".write": "auth != null && auth.uid == $remetente",
+            ".read": "auth != null && auth.uid == $remetente"
+          }
+        }
+      }
     }
   }
 }

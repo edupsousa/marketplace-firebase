@@ -16,6 +16,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import app from "./app";
 import { setOnline } from "./database";
 
@@ -36,6 +37,14 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const useAuthContext = () => useContext(AuthContext)!;
+const useAuthUser = () => {
+  const navigate = useNavigate();
+  const { user } = useAuthContext();
+  if (!user) {
+    navigate("/login", { replace: true });
+  }
+  return user;
+};
 
 function AuthContextProvider({ children }: PropsWithChildren<{}>) {
   const [user, setUser] = useState<User | null>(null);
@@ -74,4 +83,4 @@ function AuthContextProvider({ children }: PropsWithChildren<{}>) {
   );
 }
 
-export { useAuthContext, AuthContextProvider };
+export { useAuthContext, AuthContextProvider, useAuthUser };

@@ -10,6 +10,7 @@ import {
   deleteDoc,
   updateDoc,
   orderBy,
+  getDoc,
 } from "firebase/firestore/lite";
 import app from "./app";
 
@@ -21,6 +22,7 @@ if (import.meta.env.DEV) {
 export type Anuncio = {
   dataAnuncio: number;
   anunciante: string;
+  nomeAnunciante: string;
   titulo: string;
   descricao: string;
   preco: number;
@@ -77,4 +79,13 @@ export async function listarTodosAnuncios(): Promise<AnuncioWithId[]> {
   return querySnapshot.docs
     .map((doc) => ({ ...(doc.data() as Anuncio), id: doc.id }))
     .sort((a, b) => b.dataAnuncio - a.dataAnuncio);
+}
+
+export async function obterAnuncio(id: string) {
+  const anuncioDoc = doc(firestore, "anuncios", id);
+  const docSnapshot = await getDoc(anuncioDoc);
+  if (docSnapshot.exists()) {
+    return docSnapshot.data() as Anuncio;
+  }
+  return null;
 }

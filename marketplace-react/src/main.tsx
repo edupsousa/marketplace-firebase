@@ -28,7 +28,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="novo" element={<NovoAnuncioPage />} />
             </Route>
             <Route path="mensagens">
-              <Route path="ver" element={<MensagensPage />} />
+              <Route path=":idAnuncio" element={<MensagensPage />} />
             </Route>
           </Route>
         </Routes>

@@ -1,17 +1,18 @@
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import EnviarFotos from "./EnviarFotos";
+import { useAuthUser } from "../firebase/auth";
+import { salvarAnunciante } from "../firebase/database";
 import {
   adicionarFotosAnuncio,
   salvarNovoAnuncio,
 } from "../firebase/firestore";
-import { useAuthContext } from "../firebase/auth";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { salvarFotoAnuncio } from "../firebase/storage";
+import EnviarFotos from "./EnviarFotos";
 
 const categorias: string[] = [
   "Eletrônicos",
@@ -47,9 +48,8 @@ const schema = yup.object({
 export default function AnuncioForm() {
   const [fotos, setFotos] = useState<File[]>([]);
   const navigate = useNavigate();
-  const { user } = useAuthContext();
-
-  if (!user) return <Navigate to="/login" />;
+  const user = useAuthUser();
+  if (!user) return null;
 
   const {
     register,
@@ -59,13 +59,15 @@ export default function AnuncioForm() {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data: FormInputs) => {
-    const anuncio = { ...data, anunciante: user.uid };
+    const nomeAnunciante = user.displayName || user.email || "Anônimo";
+    const anuncio = { ...data, nomeAnunciante, anunciante: user.uid };
     try {
       const id = await salvarNovoAnuncio(anuncio);
       const urlFotos = await Promise.all(
         fotos.map((foto) => salvarFotoAnuncio(foto, user.uid, id))
       );
       await adicionarFotosAnuncio(id, urlFotos);
+      await salvarAnunciante(id, user.uid);
       navigate("/meus-anuncios/lista");
     } catch (e) {
       console.error(e);

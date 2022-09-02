@@ -24,9 +24,6 @@ export default function AppNavBar() {
                 <Nav.Link as={NavLink} to="meus-anuncios/lista">
                   Meus Anúncios
                 </Nav.Link>
-                <Nav.Link as={NavLink} to="mensagens/ver">
-                  Caixa de Mensagens
-                </Nav.Link>
               </>
             )}
           </Nav>

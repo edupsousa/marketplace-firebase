@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Card, Carousel, Col, Image, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Carousel,
+  Col,
+  Image,
+  Row,
+  Stack,
+} from "react-bootstrap";
 import { Link, Navigate } from "react-router-dom";
 import { useAuthContext } from "../firebase/auth";
 import {
@@ -12,6 +20,7 @@ import formatarPreco from "../utils/formatarPreco";
 import { BsFillTrashFill } from "react-icons/bs";
 import { apagarFotosAnuncio } from "../firebase/storage";
 import Anuncio from "../components/Anuncio";
+import { BiMessageRoundedCheck } from "react-icons/bi";
 
 export default function MeusAnunciosPage() {
   const [anuncios, setAnuncios] = useState<AnuncioWithId[]>();
@@ -55,13 +64,21 @@ export default function MeusAnunciosPage() {
             <Anuncio
               anuncio={anuncio}
               botao={
-                <Button
-                  variant="outline-danger"
-                  size="sm"
-                  onClick={() => removerAnuncio(anuncio.id)}
-                >
-                  <BsFillTrashFill /> Remover
-                </Button>
+                <Stack gap={3} className="align-items-center">
+                  <Link
+                    className="btn btn-outline-success btn-sm"
+                    to={`/mensagens/${anuncio.id}`}
+                  >
+                    <BiMessageRoundedCheck /> Ver Propostas
+                  </Link>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={() => removerAnuncio(anuncio.id)}
+                  >
+                    <BsFillTrashFill /> Remover
+                  </Button>
+                </Stack>
               }
             />
           </Col>

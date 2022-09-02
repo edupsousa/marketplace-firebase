@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import {
   getDatabase,
   connectDatabaseEmulator,
@@ -5,7 +6,8 @@ import {
   set,
   onDisconnect,
   remove,
-  OnDisconnect,
+  push,
+  serverTimestamp,
 } from "firebase/database";
 import app from "./app";
 
@@ -23,4 +25,35 @@ export async function setOnline(uid: string) {
     await remove(onlineRef);
     await disconnectRef.cancel();
   };
+}
+
+export async function salvarAnunciante(idAnuncio: string, anunciante: string) {
+  const anunciosRef = ref(db, `anuncios/${idAnuncio}/anunciante`);
+  await set(anunciosRef, anunciante);
+}
+
+export async function salvarMensagemInteressado(
+  idInteressado: string,
+  nomeInteressado: string,
+  idAnuncio: string,
+  texto: string
+) {
+  await adicionarInteressado(idInteressado, nomeInteressado, idAnuncio);
+  const mensagemRef = ref(
+    db,
+    `anuncios/${idAnuncio}/mensagens/${idInteressado}`
+  );
+  await push(mensagemRef, { texto, dataEnvio: serverTimestamp() });
+}
+
+export async function adicionarInteressado(
+  idInteressado: string,
+  nomeInteressado: string,
+  idAnuncio: string
+) {
+  const interassadoRef = ref(
+    db,
+    `anuncios/${idAnuncio}/interessados/${idInteressado}`
+  );
+  await set(interassadoRef, { nome: nomeInteressado });
 }

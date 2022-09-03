@@ -1,11 +1,16 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyCAejugQoGO5Ne4tYD5as9nf-m3_4zAIRk",
-  authDomain: "edupsousa-marketplace.firebaseapp.com",
-  databaseURL: "https://edupsousa-marketplace-default-rtdb.firebaseio.com",
-  projectId: "edupsousa-marketplace",
-  storageBucket: "edupsousa-marketplace.appspot.com",
-  messagingSenderId: "264435943645",
-  appId: "1:264435943645:web:00d42755bebd8c67933334",
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
 };
+
+// Adicione a configuração do seu aplicativo acima e comente a linha abaixo
+throw new Error(
+  "Modifique o arquivo src/firebase/config.ts com a configuração do seu aplicativo Firebase"
+);
 
 export default firebaseConfig;

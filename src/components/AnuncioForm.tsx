@@ -46,6 +46,7 @@ const schema = yup.object({
 });
 
 export default function AnuncioForm() {
+  const [submitDesativado, setSubmitDesativado] = useState(false);
   const [fotos, setFotos] = useState<File[]>([]);
   const navigate = useNavigate();
   const user = useAuthUser();
@@ -59,6 +60,7 @@ export default function AnuncioForm() {
     resolver: yupResolver(schema),
   });
   const onSubmit = async (data: FormInputs) => {
+    setSubmitDesativado(true);
     const nomeAnunciante = user.displayName || user.email || "Anônimo";
     const anuncio = { ...data, nomeAnunciante, anunciante: user.uid };
     try {
@@ -72,6 +74,7 @@ export default function AnuncioForm() {
     } catch (e) {
       console.error(e);
     }
+    setSubmitDesativado(false);
   };
 
   return (
@@ -125,7 +128,7 @@ export default function AnuncioForm() {
         <EnviarFotos onFotosChange={setFotos} />
       </Form.Group>
 
-      <Button variant="success" type="submit">
+      <Button variant="success" type="submit" disabled={submitDesativado}>
         Salvar Anúncio
       </Button>
     </Form>
